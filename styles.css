@@ -1,0 +1,709 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* === Control button === */
+.civitai-design-controller {
+    position: relative;
+    margin: 0 4px;
+    width: 40px;
+    height: 40px;
+    box-sizing: border-box;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    z-index: 10000;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.civitai-design-controller:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5), 0 0 0 3px rgba(255, 255, 255, 0.15);
+}
+
+.civitai-design-controller svg {
+    fill: white;
+    transition: transform 0.3s ease;
+}
+.civitai-design-controller:hover svg {
+    transform: rotate(90deg);
+}
+
+/* === Settings pop-up === */
+.civitai-settings-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(12px);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+    opacity: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    user-select: none;
+    transition: opacity 0.3s ease-out;
+}
+.civitai-settings-popup.show {
+    opacity: 1;
+}
+.civitai-settings-popup.closing {
+    opacity: 0;
+}
+
+.civitai-popup-content {
+    width: 90%;
+    max-height: 90vh;
+    background: rgba(26, 27, 35, 0.95);
+    border: 1px solid rgba(45, 46, 63, 0.5);
+    border-radius: 20px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+    overflow: hidden;
+    transform: translateY(30px) scale(0.95);
+    user-select: none;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), max-width 0.4s ease;
+}
+.civitai-popup-content[data-layout='list'] {
+    max-width: 700px;
+}
+.civitai-popup-content[data-layout='grid'] {
+    max-width: 850px;
+}
+
+.civitai-settings-popup.show .civitai-popup-content {
+    transform: translateY(0) scale(1);
+}
+
+.civitai-popup-content.closing {
+    transform: translateY(40px) scale(0.9);
+    opacity: 0;
+}
+
+/* Header */
+.civitai-popup-header {
+    position: relative;
+    padding: 24px 24px 16px;
+    border-bottom: 1px solid rgba(45, 46, 63, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.civitai-popup-header h3 {
+    margin: 0;
+    width: 100%;
+    font-size: 24px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea 0%, #9c7fd9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+    text-align: center;
+}
+
+.civitai-layout-toggle {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    border-radius: 12px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.civitai-layout-toggle:hover {
+    background: rgba(102, 126, 234, 0.2);
+    border-color: rgba(102, 126, 234, 0.5);
+    transform: scale(1.05);
+}
+
+.civitai-layout-toggle svg {
+    transition: transform 0.3s ease;
+}
+.civitai-layout-toggle:hover svg {
+    transform: scale(1.1);
+}
+
+.civitai-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    color: #9ca3af;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(156, 163, 175, 0.3);
+    border-radius: 12px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.civitai-close-btn:hover {
+    color: rgba(255, 50, 45, 1);
+    background: rgba(255, 50, 45, 0.2);
+    border-color: rgba(255, 50, 45, 0.5);
+    transform: scale(1.05);
+}
+
+.civitai-close-btn svg {
+    transition: transform 0.3s ease;
+}
+.civitai-close-btn:hover svg {
+    transform: rotate(90deg);
+}
+
+/* Body */
+.civitai-popup-body {
+    padding: 24px;
+    max-height: 70vh;
+    color: #e1e5e9;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+/* -- Custom scrollbar -- */
+.civitai-popup-body::-webkit-scrollbar {
+    width: 6px;
+}
+.civitai-popup-body::-webkit-scrollbar-track {
+    background: rgba(26, 27, 35, 0.4);
+}
+.civitai-popup-body::-webkit-scrollbar-thumb {
+    background: rgba(102, 126, 234, 0.4);
+    border-radius: 3px;
+}
+
+/* Section headings */
+.civitai-section-title {
+    position: relative;
+    margin: 24px 0 16px 0;
+    padding: 0 16px;
+    color: #f3f4f6;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.civitai-section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 16px;
+    right: 16px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(102, 126, 234, 0.4), transparent);
+}
+
+/* -- Layouts -- */
+.civitai-settings-layout {
+    margin-bottom: 16px;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.civitai-settings-layout.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+.civitai-settings-layout.list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Settings elements (parameters) */
+.civitai-setting-item {
+    position: relative;
+    padding: 18px 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(45, 46, 63, 0.4);
+    border-radius: 12px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.civitai-setting-item.preferences-column {
+    grid-column: 1 / -1;
+    background: rgba(102, 126, 234, 0.05);
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0;
+}
+.civitai-preferences-row {
+    display: flex;
+    width: 100%;
+}
+.civitai-preference-group {
+    padding: 18px 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.civitai-preference-group.language-group {
+    flex: 0 0 60%;
+    border-right: 1px solid rgba(102, 126, 234, 0.2);
+}
+.civitai-preference-group.theme-group {
+    flex: 0 0 40%;
+}
+
+.civitai-setting-info {
+    flex: 1;
+}
+.civitai-setting-info h4 {
+    margin: 0 0 6px 0;
+    color: #f3f4f6;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+.civitai-setting-info p {
+    margin: 0;
+    color: #a1a8b8;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+/* -- Custom Checkboxes (Switches) -- */
+.civitai-custom-checkbox {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
+
+.civitai-custom-checkbox input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.civitai-checkbox-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #3a3c4e;
+    border: 2px solid #4b5563;
+    border-radius: 28px;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.civitai-checkbox-slider:before {
+    position: absolute;
+    content: '';
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+input:checked + .civitai-checkbox-slider {
+    background: linear-gradient(135deg, #667eea 0%, #9c7fd9 100%);
+    border-color: #7d8feb;
+}
+input:checked + .civitai-checkbox-slider:before {
+    transform: translateX(24px);
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+}
+
+/* -- Blur Slider -- */
+.civitai-setting-item.blur-slider-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+}
+.civitai-setting-item.blur-slider-item.disabled {
+    opacity: 0.5;
+}
+
+.civitai-setting-blur-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.civitai-blur-value {
+    padding: 4px 8px;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 6px;
+    color: #3b82f6;
+    font-size: 13px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+/* Custom Range Slider */
+.civitai-custom-slider {
+    position: relative;
+    margin: 4px 0;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.civitai-slider-labels {
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    color: #9ca3af;
+    font-size: 11px;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.civitai-slider-labels.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.civitai-custom-slider input[type='range'] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    outline: none;
+    cursor: default;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 1;
+}
+
+.civitai-slider-track {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: #3a3c4e;
+    border: 1px solid #4b5563;
+    border-radius: 3px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 1;
+}
+.civitai-slider-track::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: var(--progress, 50%);
+    height: 100%;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    border-radius: 3px;
+    transition: width 0.2s ease;
+}
+
+.civitai-slider-thumb {
+    position: absolute;
+    top: 50%;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border: 3px solid #3b82f6;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.4);
+    transform: translate(-50%, -50%);
+    cursor: grab;
+    z-index: 2;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+.civitai-slider-thumb:hover {
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.6);
+    transform: translate(-50%, -50%) scale(1.1);
+}
+.civitai-slider-thumb:active {
+    cursor: grabbing;
+    transform: translate(-50%, -50%) scale(1.05);
+}
+
+.civitai-custom-slider:hover .civitai-slider-thumb {
+    border-color: #1d4ed8;
+}
+
+.civitai-setting-item.disabled .civitai-slider-thumb,
+.civitai-setting-item.disabled .civitai-slider-track {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* -- Language selection -- */
+.civitai-language-selector {
+    position: relative;
+    width: 100%;
+}
+
+.civitai-language-btn {
+    position: relative;
+    padding: 12px 16px;
+    background: rgba(45, 46, 63, 0.7);
+    border: 1px solid #4b5563;
+    border-radius: 12px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    color: #e1e5e9;
+    font-size: 15px;
+    font-weight: 500;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.civitai-language-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.civitai-language-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 6px;
+    width: 100%;
+    background: #1a1b23;
+    border: 1px solid #2d2e3f;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    box-sizing: border-box;
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+    transform: translateY(-10px);
+    z-index: 10;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.civitai-language-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.civitai-language-dropdown.show ~ .civitai-language-btn svg {
+    transform: rotate(180deg);
+}
+
+.civitai-language-option {
+    position: relative;
+    padding: 12px 16px;
+    color: #e1e5e9;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    gap: 12px;
+    transition: all 0.2s;
+}
+.civitai-language-option:hover {
+    background: rgba(102, 126, 234, 0.15);
+    color: #e1e5e9;
+}
+
+.civitai-language-option.active {
+    background: rgba(102, 126, 234, 0.25);
+    color: #667eea;
+    font-weight: 600;
+}
+.civitai-language-option.active::after {
+    content: '✓';
+    margin-left: auto;
+    color: #667eea;
+    font-weight: bold;
+}
+
+.civitai-language-flag {
+    width: 24px;
+    height: 18px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    font-size: 11px;
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* -- Theme selection -- */
+.civitai-theme-selector {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+}
+
+.civitai-theme-option {
+    flex: 1;
+    padding: 12px 8px;
+    background: rgba(45, 46, 63, 0.3);
+    border: 1px solid rgba(75, 85, 99, 0.3);
+    border-radius: 12px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    color: #9ca3af;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+.civitai-theme-option:hover {
+    background: rgba(102, 126, 234, 0.1);
+    border-color: rgba(102, 126, 234, 0.3);
+    color: #e1e5e9;
+    transform: translateY(-2px);
+}
+
+.civitai-theme-option.active {
+    background: rgba(102, 126, 234, 0.2);
+    border-color: rgba(102, 126, 234, 0.5);
+    color: #667eea;
+}
+
+.civitai-theme-option svg {
+    transition: transform 0.3s ease;
+}
+
+.civitai-theme-option:hover svg {
+    transform: scale(1.1);
+}
+
+/* === Footer === */
+.civitai-popup-footer {
+    padding: 20px 24px;
+    background: rgba(20, 21, 30, 0.4);
+    border-top: 1px solid rgba(45, 46, 63, 0.5);
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.civitai-watermark {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.civitai-avatar {
+    width: 32px;
+    height: 32px;
+    border: 2px solid rgba(102, 126, 234, 0.3);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+.civitai-watermark:hover .civitai-avatar {
+    border-color: rgba(102, 126, 234, 0.6);
+    transform: scale(1.05);
+}
+
+.civitai-author-link {
+    position: relative;
+    padding: 4px 0;
+    color: #9ca3af;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+.civitai-author-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: #9ca3af;
+    transform: scaleX(0.75);
+    transition: transform 0.2s;
+}
+.civitai-author-link:hover {
+    color: #e1e5e9;
+}
+.civitai-author-link:hover::after {
+    transform: scaleX(1);
+}
+
+.civitai-footer-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.civitai-popup-footer button {
+    padding: 12px 26px;
+    min-width: 110px;
+    border: none;
+    border-radius: 12px;
+    box-sizing: border-box;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.civitai-save-btn {
+    color: white;
+    background: linear-gradient(135deg, #667eea 0%, #9c7fd9 100%);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+.civitai-save-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.civitai-reset-btn {
+    color: #e1e5e9;
+    background: rgba(55, 65, 81, 0.5);
+    border: 1px solid rgba(75, 85, 99, 0.5);
+}
+.civitai-reset-btn:hover {
+    background: rgba(75, 85, 99, 0.7);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* === Styles for hiding elements === */
+.civitai-hide-control-button .civitai-design-controller {
+    display: none !important;
+}
