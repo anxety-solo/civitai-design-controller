@@ -704,6 +704,37 @@ input:checked + .civitai-checkbox-slider:before {
 }
 
 /* === Styles for hiding elements === */
-.civitai-hide-control-button .civitai-design-controller {
+/* Hide decorative user avatar overlays */
+body.civitai-hide-avatar-animations img[src*="user avatar decoration"] {
+    display: none !important;
+}
+
+/* Remove card glow and cosmetic frame styles */
+body.civitai-hide-card-glow [class*="CosmeticWrapper_wrapper__"],
+body.civitai-hide-card-glow [class*="CosmeticWrapper_cssFrame__"],
+body.civitai-hide-card-glow [class*="CosmeticWrapper_glow__"] {
+    --bgGradient: none !important;
+    background: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+/* Hide pseudo-elements (::after) used for decorative effects */
+body.civitai-hide-card-glow [class*="CosmeticWrapper_wrapper__"]::after,
+body.civitai-hide-card-glow [class*="CosmeticWrapper_cssFrame__"]::after,
+body.civitai-hide-card-glow [class*="CosmeticWrapper_glow__"]::after {
+    content: none !important;
+    display: none !important;
+}
+
+/* Hide any Pro badge/button (matches any variation) */
+body.civitai-hide-pro-badges a[href*="/pricing"][class*="SupportButton_supportButton"] {
+    display: none !important;
+}
+
+/* Hide "Updates" and "Shop" navigation buttons */
+body.civitai-hide-updates-button a[href="/changelog"],
+body.civitai-hide-purchase-buttons a[href="/shop"] {
     display: none !important;
 }

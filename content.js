@@ -2,9 +2,10 @@ class DefaultSettings {
     static get() {
         return {
             hideAvatarAnimations: true,
-            hideProfileBanners: true,
-            hideCardGlow: true,
+            stopProfileBanners: true,
             normalizeAuthorNames: true,
+            hideCardGlow: true,
+            cardAppearance: true,
             hideProBadges: true,
             hideUpdatesButton: false,
             hidePurchaseButtons: false,
@@ -35,8 +36,9 @@ class CivitAIController {
                 title: 'CivitAI Appearance Settings',
                 avatarAnimations: 'Hide Avatar Decorations',
                 profileBanners: 'Stop Banner Animations',
-                cardGlow: 'Hide Card Outline Glow',
                 normalizeAuthorNames: 'Uniform Author Name Style',
+                cardGlow: 'Hide Card Outline Glow',
+                cardAppearance: 'Improve Card Appearance',
                 ProBadges: 'Hide Pro Badge',
                 UpdatesButton: 'Hide Updates Button',
                 PurchaseButtons: 'Hide Purchase Button',
@@ -50,8 +52,9 @@ class CivitAIController {
                 // Description
                 descriptionAvatar: 'Removes sparkles and animations from avatars. Pretty? Sure. Necessary? Not always.',
                 descriptionBanners: 'Stops those endlessly flashing banners. Your eyes will thank you.',
-                descriptionGlow: 'Turns off the glowing card borders. A card without a “halo” is still a card.',
                 descriptionNames: 'Makes all author names follow the same style. No more rainbow circus.',
+                descriptionGlow: 'Turns off the glowing card borders. A card without a “halo” is still a card.',
+                descriptionCardAppearance: 'Improves the appearance of cards for better text readability and overall visual clarity.',
                 descriptionProBadges: 'Hides Pro badges. Because modesty is classy.',
                 descriptionUpdatesButton: 'Hides the “Updates” button. Seriously, who even clicks that?',
                 descriptionPurchaseButtons: 'Hides purchase buttons. If you’re not spending money — why keep them around?',
@@ -70,8 +73,9 @@ class CivitAIController {
                 title: 'Настройки оформления CivitAI',
                 avatarAnimations: 'Скрыть украшения аватаров',
                 profileBanners: 'Остановить анимацию баннеров',
-                cardGlow: 'Скрыть обводку карточек',
                 normalizeAuthorNames: 'Единый стиль имен авторов',
+                cardGlow: 'Скрыть обводку карточек',
+                cardAppearance: 'Улучшить внешний вид карточек',
                 ProBadges: 'Скрыть Pro бэйджик',
                 UpdatesButton: 'Скрыть кнопку Обновлений',
                 PurchaseButtons: 'Скрыть кнопку Покупок',
@@ -85,8 +89,9 @@ class CivitAIController {
                 // Description
                 descriptionAvatar: 'Убирает всякие блестяшки и анимации с аватаров. Красиво? Да. Нужно? Не всегда.',
                 descriptionBanners: 'Останавливает эти бесконечно мигающие баннеры. Глазам — спасибо.',
-                descriptionGlow: 'Вырубает светящуюся рамку у карточек. Карточка без “ореола” — тоже карточка.',
                 descriptionNames: 'Делает ники авторов одинаковыми по стилю. Чтобы без цветного цирка.',
+                descriptionGlow: 'Вырубает светящуюся рамку у карточек. Карточка без “ореола” — тоже карточка.',
+                descriptionCardAppearance: 'Улучшает внешний вид карточек для лучшего восприятия текста и детализации элементов карточек.',
                 descriptionProBadges: 'Скрывает значки Pro. Потому что скромность украшает.',
                 descriptionUpdatesButton: 'Прячет кнопку “Updates”. Серьёзно, кто вообще туда жмёт?',
                 descriptionPurchaseButtons: 'Прячет кнопки покупок. Если не планируешь тратить деньги — зачем они тебе?',
@@ -307,12 +312,23 @@ class CivitAIController {
 
                         <div class="civitai-setting-item">
                             <label class="civitai-custom-checkbox">
-                                <input type="checkbox" id="hideProfileBanners" ${this.tempSettings.hideProfileBanners ? 'checked' : ''}>
+                                <input type="checkbox" id="stopProfileBanners" ${this.tempSettings.stopProfileBanners ? 'checked' : ''}>
                                 <span class="civitai-checkbox-slider"></span>
                             </label>
                             <div class="civitai-setting-info">
                                 <h4>${t.profileBanners}</h4>
                                 <p>${t.descriptionBanners}</p>
+                            </div>
+                        </div>
+
+                        <div class="civitai-setting-item">
+                            <label class="civitai-custom-checkbox">
+                                <input type="checkbox" id="normalizeAuthorNames" ${this.tempSettings.normalizeAuthorNames ? 'checked' : ''}>
+                                <span class="civitai-checkbox-slider"></span>
+                            </label>
+                            <div class="civitai-setting-info">
+                                <h4>${t.normalizeAuthorNames}</h4>
+                                <p>${t.descriptionNames}</p>
                             </div>
                         </div>
 
@@ -329,12 +345,12 @@ class CivitAIController {
 
                         <div class="civitai-setting-item">
                             <label class="civitai-custom-checkbox">
-                                <input type="checkbox" id="normalizeAuthorNames" ${this.tempSettings.normalizeAuthorNames ? 'checked' : ''}>
+                                <input type="checkbox" id="cardAppearance" ${this.tempSettings.cardAppearance ? 'checked' : ''}>
                                 <span class="civitai-checkbox-slider"></span>
                             </label>
                             <div class="civitai-setting-info">
-                                <h4>${t.normalizeAuthorNames}</h4>
-                                <p>${t.descriptionNames}</p>
+                                <h4>${t.cardAppearance}</h4>
+                                <p>${t.descriptionCardAppearance}</p>
                             </div>
                         </div>
 
@@ -747,21 +763,20 @@ class CivitAIController {
 
         // Controlling the display of the controller button
         if (this.settings.showControlButton) {
-            body.classList.remove('civitai-hide-control-button');
             if (!document.querySelector('.civitai-design-controller')) {
                 this.createControlButton();
             }
         } else {
-            body.classList.add('civitai-hide-control-button');
             const controlBtn = document.querySelector('.civitai-design-controller');
             if (controlBtn) controlBtn.remove();
         }
 
         // Apply settings classes
         body.classList.toggle('civitai-hide-avatar-animations', this.settings.hideAvatarAnimations);
-        body.classList.toggle('civitai-hide-profile-banners', this.settings.hideProfileBanners);
-        body.classList.toggle('civitai-hide-card-glow', this.settings.hideCardGlow);
+        body.classList.toggle('civitai-stop-profile-banners', this.settings.stopProfileBanners);
         body.classList.toggle('civitai-normalize-author-names', this.settings.normalizeAuthorNames);
+        body.classList.toggle('civitai-hide-card-glow', this.settings.hideCardGlow);
+        body.classList.toggle('civitai-improve-card-appearance', this.settings.cardAppearance);
         body.classList.toggle('civitai-hide-pro-badges', this.settings.hideProBadges);
         body.classList.toggle('civitai-hide-updates-button', this.settings.hideUpdatesButton);
         body.classList.toggle('civitai-hide-purchase-buttons', this.settings.hidePurchaseButtons);
