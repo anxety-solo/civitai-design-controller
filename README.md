@@ -4,7 +4,7 @@
 > A Chrome browser extension that removes annoying decorations on CivitAI</br>
 > This is my first extension and my first major project with JS, so the implementation is pretty terrible :3
 
-[![Version](https://img.shields.io/badge/version-1.0-blue)](https://github.com/anxety-solo/civitai-design-controller)
+[![Version](https://img.shields.io/badge/version-1.0.2-blue)](https://github.com/anxety-solo/civitai-design-controller)
 
 <div align="center">
   <img src="preview.png" alt="CivitAI Shits Controller Preview" width="800">
@@ -25,7 +25,7 @@
 ### 🚧 **In Development / Planned**
 
 - [ ] **Complete Light Theme Implementation** - Full light theme support
-- [ ] **Automatic Website Theme Detection** - Sync with CivitAI's theme
+- [x] **Automatic Website Theme Detection** - Sync with CivitAI's theme
 - [ ] **Additional Visual Filters** - More customization options
 - [ ] **Performance Optimizations** - Reduce memory usage and improve speed
 

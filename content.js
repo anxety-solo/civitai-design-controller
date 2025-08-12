@@ -14,6 +14,7 @@ class DefaultSettings {
             blurLevel: 12,
             layoutMode: 'grid',
             language: this.detectLanguage(),
+            theme: 'auto', // 'auto', 'light', 'dark'
         };
     }
 
@@ -23,6 +24,25 @@ class DefaultSettings {
             return 'ru';
         }
         return 'en';
+    }
+
+    static detectTheme() {
+        // Check for data-mantine-color-scheme attribute
+        const htmlElement = document.documentElement;
+
+        // Check HTML
+        if (htmlElement.hasAttribute('data-mantine-color-scheme')) {
+            const scheme = htmlElement.getAttribute('data-mantine-color-scheme');
+            if (scheme === 'dark') return 'dark';
+            if (scheme === 'light') return 'light';
+        }
+        
+        // Fallback to system preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return 'dark';
+        }
+        
+        return 'light';
     }
 }
 
@@ -62,7 +82,7 @@ class CivitAIController {
                 descriptionBlur: 'Enables/disables stylish background blur. Purely for aesthetics.',
                 descriptionBlurLevel: 'Adjusts blur strength. From “barely” to “can’t see a thing”.',
                 descriptionLanguage: 'Choose the language your extension will speak to you in.',
-                descriptionTheme: 'Switch between light and dark extension theme.',
+                descriptionTheme: 'Switch between light, dark, or automatic theme mode.',
                 // Section Names
                 sectionPreferences: 'Preferences',
                 sectionAppearance: 'Appearance',
@@ -99,7 +119,7 @@ class CivitAIController {
                 descriptionBlur: 'Включает/отключает модное размытие фона. Чисто для эстетики.',
                 descriptionBlurLevel: 'Настраивает уровень размытия. От “чуть-чуть” до “ничего не видно”.',
                 descriptionLanguage: 'Выбирай язык, на котором будет с тобой общаться расширение.',
-                descriptionTheme: 'Переключение между светлой и тёмной темой расширения.',
+                descriptionTheme: 'Переключение между светлой, тёмной или автоматической темой расширения.',
                 // Section Names
                 sectionPreferences: 'Предпочтения',
                 sectionAppearance: 'Внешний вид',
@@ -118,6 +138,13 @@ class CivitAIController {
         try {
             await this.loadSettings();
             this.tempSettings = { ...this.settings };
+            
+            // Initialize theme if in auto mode
+            if (this.settings.theme === 'auto') {
+                // Keep theme as 'auto', but detect for display purposes
+                this.tempSettings.theme = 'auto';
+            }
+            
             this.setupMessageListener();
             this.createControlButton();
             this.applySettings();
@@ -222,8 +249,14 @@ class CivitAIController {
         popup.className = 'civitai-settings-popup';
         const t = this.translations[this.tempSettings.language];
 
+        // Determine initial theme for popup
+        let initialTheme = this.tempSettings.theme;
+        if (this.tempSettings.theme === 'auto') {
+            initialTheme = DefaultSettings.detectTheme();
+        }
+
         popup.innerHTML = `
-            <div class="civitai-popup-content" data-layout="${this.tempSettings.layoutMode}" data-theme="${this.tempSettings.theme}">
+            <div class="civitai-popup-content" data-layout="${this.tempSettings.layoutMode}" data-theme="${initialTheme}">
                 <div class="civitai-popup-header">
                     <h3>${t.title}</h3>
                     <button class="civitai-layout-toggle" data-layout="${this.tempSettings.layoutMode}">
@@ -278,6 +311,12 @@ class CivitAIController {
                                         <p>${t.descriptionTheme}</p>
                                     </div>
                                     <div class="civitai-theme-selector">
+                                        <div class="civitai-theme-option ${this.tempSettings.theme === 'auto' ? 'active' : ''}" data-theme="auto">
+                                            <svg width="18px" height="18px" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                            </svg>
+                                            Auto
+                                        </div>
                                         <div class="civitai-theme-option ${this.tempSettings.theme === 'light' ? 'active' : ''}" data-theme="light">
                                             <svg width="18px" height="18px" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                 <path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 7 A5 5 0 1 1 12 17 A5 5 0 1 1 12 7 M12 1 L12 4 M12 20 L12 23 M4.22 4.22 L6.34 6.34 M17.66 17.66 L19.78 19.78 M1 12 L4 12 M20 12 L23 12 M4.22 19.78 L6.34 17.66 M17.66 6.34 L19.78 4.22"/>
@@ -422,12 +461,12 @@ class CivitAIController {
                                 <p>${t.descriptionBlurLevel}</p>
                             </div>
                             <div class="civitai-custom-slider">
-                                <input type="range" id="blurLevel" min="4" max="32" step="2" value="${this.tempSettings.blurLevel}" ${this.tempSettings.enableBlur ? '' : 'disabled'}>
+                                <input type="range" id="blurLevel" min="4" max="40" step="2" value="${this.tempSettings.blurLevel}" ${this.tempSettings.enableBlur ? '' : 'disabled'}>
                                 <div class="civitai-slider-track"></div>
-                                <div class="civitai-slider-thumb" style="left: ${((this.tempSettings.blurLevel - 4) / 28) * 100}%"></div>
+                                <div class="civitai-slider-thumb" style="left: ${((this.tempSettings.blurLevel - 4) / 36) * 100}%"></div>
                                 <div class="civitai-slider-labels">
                                     <span class="civitai-slider-min">4px</span>
-                                    <span class="civitai-slider-max">32px</span>
+                                    <span class="civitai-slider-max">40px</span>
                                 </div>
                             </div>
                         </div>
@@ -518,8 +557,16 @@ class CivitAIController {
                 // Add active class to clicked option
                 option.classList.add('active');
 
-                this.tempSettings.theme = option.dataset.theme;
-                popup.querySelector('.civitai-popup-content').dataset.theme = option.dataset.theme;
+                const selectedTheme = option.dataset.theme;
+                this.tempSettings.theme = selectedTheme;
+                
+                // Determine actual theme for popup display
+                let displayTheme = selectedTheme;
+                if (selectedTheme === 'auto') {
+                    displayTheme = DefaultSettings.detectTheme();
+                }
+                
+                popup.querySelector('.civitai-popup-content').dataset.theme = displayTheme;
 
                 // Update blur effect for new theme
                 this.updateBlurEffect();
@@ -535,7 +582,7 @@ class CivitAIController {
         let isDragging = false;
 
         const updateSliderThumb = (value) => {
-            const percentage = ((value - 4) / 28) * 100;
+            const percentage = ((value - 4) / 36) * 100;
             sliderThumb.style.left = percentage + '%';
 
             // Update the CSS variable for the track
@@ -554,9 +601,9 @@ class CivitAIController {
 
                 const rect = sliderTrack.getBoundingClientRect();
                 const percentage = Math.max(0, Math.min(100, ((moveEvent.clientX - rect.left) / rect.width) * 100));
-                const rawValue = (percentage / 100) * 28 + 4;
+                const rawValue = (percentage / 100) * 36 + 4;
                 const steppedValue = Math.round(rawValue / 2) * 2; // Step of 2
-                const clampedValue = Math.max(4, Math.min(32, steppedValue));
+                const clampedValue = Math.max(4, Math.min(40, steppedValue));
 
                 this.tempSettings.blurLevel = clampedValue;
                 blurSlider.value = clampedValue;
@@ -589,9 +636,9 @@ class CivitAIController {
 
             const rect = sliderTrack.getBoundingClientRect();
             const percentage = ((e.clientX - rect.left) / rect.width) * 100;
-            const rawValue = (percentage / 100) * 28 + 4;
+            const rawValue = (percentage / 100) * 36 + 4;
             const steppedValue = Math.round(rawValue / 2) * 2;
-            const clampedValue = Math.max(4, Math.min(32, steppedValue));
+            const clampedValue = Math.max(4, Math.min(40, steppedValue));
 
             this.tempSettings.blurLevel = clampedValue;
             blurSlider.value = clampedValue;
@@ -692,6 +739,22 @@ class CivitAIController {
         };
     }
 
+    updateThemeFromSite() {
+        if (this.settings.theme !== 'auto') return;
+        
+        const detectedTheme = DefaultSettings.detectTheme();
+        
+        // Update popup theme if it's open and in auto mode
+        const popup = document.querySelector('.civitai-settings-popup');
+        if (popup) {
+            const popupContent = popup.querySelector('.civitai-popup-content');
+            if (popupContent) {
+                popupContent.dataset.theme = detectedTheme;
+                this.updateBlurEffect();
+            }
+        }
+    }
+
     updateBlurEffect() {
         const popup = document.querySelector('.civitai-settings-popup');
         if (!popup) return;
@@ -701,8 +764,14 @@ class CivitAIController {
 
         popup.style.backdropFilter = level > 0 ? `blur(${level}px)` : 'none';
 
+        // Determine actual theme for display
+        let displayTheme = this.tempSettings.theme;
+        if (this.tempSettings.theme === 'auto') {
+            displayTheme = DefaultSettings.detectTheme();
+        }
+
         const opacity = level > 0 ? 0.95 : 1;
-        content.style.background = this.tempSettings.theme === 'light' ? `rgba(255, 255, 255, ${opacity})` : `rgba(26, 27, 35, ${opacity})`;
+        content.style.background = displayTheme === 'light' ? `rgba(255, 255, 255, ${opacity})` : `rgba(26, 27, 35, ${opacity})`;
     }
 
     closePopup(popup) {
@@ -711,6 +780,11 @@ class CivitAIController {
 
         // Reset temp settings to saved settings when closing without saving
         this.tempSettings = { ...this.settings };
+        
+        // If theme is auto, keep it as auto
+        if (this.tempSettings.theme === 'auto') {
+            // Keep as auto, no need to change
+        }
 
         // Cleanup event listeners
         if (popup._cleanup) {
@@ -790,6 +864,7 @@ class CivitAIController {
 
         this.observer = new MutationObserver((mutations) => {
             let shouldCreateButton = false;
+            let shouldUpdateTheme = false;
 
             for (const mutation of mutations) {
                 if (mutation.type === 'childList') {
@@ -807,17 +882,34 @@ class CivitAIController {
                             }
                         }
                     }
+                } else if (mutation.type === 'attributes' && mutation.attributeName === 'data-mantine-color-scheme') {
+                    // Check if theme is auto and site theme changed
+                    if (this.settings.theme === 'auto') {
+                        shouldUpdateTheme = true;
+                    }
                 }
             }
 
             if (shouldCreateButton && this.settings.showControlButton && !document.querySelector('.civitai-design-controller')) {
                 this.createControlButton();
             }
+
+            if (shouldUpdateTheme) {
+                this.updateThemeFromSite();
+            }
         });
 
         this.observer.observe(document.body, {
             childList: true,
             subtree: true,
+            attributes: true,
+            attributeFilter: ['data-mantine-color-scheme']
+        });
+
+        // Also observe HTML element for theme changes
+        this.observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-mantine-color-scheme']
         });
     }
 
