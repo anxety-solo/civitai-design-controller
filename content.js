@@ -50,6 +50,24 @@ class CivitAIController {
     constructor() {
         this.settings = DefaultSettings.get();
         this.tempSettings = { ...this.settings }; // Temporary settings for unsaved changes
+
+        // Helper method to create setting items
+        this.createSettingItem = (id, title, description, isUnimplemented = false) => {
+            const unimplementedClass = isUnimplemented ? ' unimplemented' : '';
+            return `
+                <div class="civitai-setting-item${unimplementedClass}">
+                    <label class="civitai-custom-checkbox">
+                        <input type="checkbox" id="${id}" ${this.tempSettings[id] ? 'checked' : ''}>
+                        <span class="civitai-checkbox-slider"></span>
+                    </label>
+                    <div class="civitai-setting-info">
+                        <h4>${title}</h4>
+                        <p>${description}</p>
+                    </div>
+                </div>
+            `;
+        };
+
         this.translations = {
             en: {
                 // Popup
@@ -346,119 +364,21 @@ class CivitAIController {
                     <!-- Section: Appearance Settings -->
                     <div class="civitai-section-title">${t.sectionAppearance}</div>
                     <div class="civitai-settings-layout ${this.tempSettings.layoutMode}">
-                        <div class="civitai-setting-item">
-                            <label class="civitai-custom-checkbox">
-                                <input type="checkbox" id="hideAvatarAnimations" ${this.tempSettings.hideAvatarAnimations ? 'checked' : ''}>
-                                <span class="civitai-checkbox-slider"></span>
-                            </label>
-                            <div class="civitai-setting-info">
-                                <h4>${t.avatarAnimations}</h4>
-                                <p>${t.descriptionAvatar}</p>
-                            </div>
-                        </div>
-
-                        <div class="civitai-setting-item unimplemented">
-                            <label class="civitai-custom-checkbox">
-                                <input type="checkbox" id="stopProfileBanners" ${this.tempSettings.stopProfileBanners ? 'checked' : ''}>
-                                <span class="civitai-checkbox-slider"></span>
-                            </label>
-                            <div class="civitai-setting-info">
-                                <h4>${t.profileBanners}</h4>
-                                <p>${t.descriptionBanners}</p>
-                            </div>
-                        </div>
-
-                        <div class="civitai-setting-item">
-                            <label class="civitai-custom-checkbox">
-                                <input type="checkbox" id="normalizeAuthorNames" ${this.tempSettings.normalizeAuthorNames ? 'checked' : ''}>
-                                <span class="civitai-checkbox-slider"></span>
-                            </label>
-                            <div class="civitai-setting-info">
-                                <h4>${t.normalizeAuthorNames}</h4>
-                                <p>${t.descriptionNames}</p>
-                            </div>
-                        </div>
-
-                        <div class="civitai-setting-item">
-                            <label class="civitai-custom-checkbox">
-                                <input type="checkbox" id="hideCardGlow" ${this.tempSettings.hideCardGlow ? 'checked' : ''}>
-                                <span class="civitai-checkbox-slider"></span>
-                            </label>
-                            <div class="civitai-setting-info">
-                                <h4>${t.cardGlow}</h4>
-                                <p>${t.descriptionGlow}</p>
-                            </div>
-                        </div>
-
-                        <div class="civitai-setting-item">
-                            <label class="civitai-custom-checkbox">
-                                <input type="checkbox" id="cardAppearance" ${this.tempSettings.cardAppearance ? 'checked' : ''}>
-                                <span class="civitai-checkbox-slider"></span>
-                            </label>
-                            <div class="civitai-setting-info">
-                                <h4>${t.cardAppearance}</h4>
-                                <p>${t.descriptionCardAppearance}</p>
-                            </div>
-                        </div>
-
-                        <div class="civitai-setting-item">
-                            <label class="civitai-custom-checkbox">
-                                <input type="checkbox" id="hideProBadges" ${this.tempSettings.hideProBadges ? 'checked' : ''}>
-                                <span class="civitai-checkbox-slider"></span>
-                            </label>
-                            <div class="civitai-setting-info">
-                                <h4>${t.ProBadges}</h4>
-                                <p>${t.descriptionProBadges}</p>
-                            </div>
-                        </div>
-
-                        <div class="civitai-setting-item">
-                            <label class="civitai-custom-checkbox">
-                                <input type="checkbox" id="hideUpdatesButton" ${this.tempSettings.hideUpdatesButton ? 'checked' : ''}>
-                                <span class="civitai-checkbox-slider"></span>
-                            </label>
-                            <div class="civitai-setting-info">
-                                <h4>${t.UpdatesButton}</h4>
-                                <p>${t.descriptionUpdatesButton}</p>
-                            </div>
-                        </div>
-
-                        <div class="civitai-setting-item">
-                            <label class="civitai-custom-checkbox">
-                                <input type="checkbox" id="hidePurchaseButtons" ${this.tempSettings.hidePurchaseButtons ? 'checked' : ''}>
-                                <span class="civitai-checkbox-slider"></span>
-                            </label>
-                            <div class="civitai-setting-info">
-                                <h4>${t.PurchaseButtons}</h4>
-                                <p>${t.descriptionPurchaseButtons}</p>
-                            </div>
-                        </div>
+                        ${this.createSettingItem('hideAvatarAnimations', t.avatarAnimations, t.descriptionAvatar)}
+                        ${this.createSettingItem('stopProfileBanners', t.profileBanners, t.descriptionBanners, true)}
+                        ${this.createSettingItem('normalizeAuthorNames', t.normalizeAuthorNames, t.descriptionNames)}
+                        ${this.createSettingItem('hideCardGlow', t.cardGlow, t.descriptionGlow)}
+                        ${this.createSettingItem('cardAppearance', t.cardAppearance, t.descriptionCardAppearance)}
+                        ${this.createSettingItem('hideProBadges', t.ProBadges, t.descriptionProBadges)}
+                        ${this.createSettingItem('hideUpdatesButton', t.UpdatesButton, t.descriptionUpdatesButton)}
+                        ${this.createSettingItem('hidePurchaseButtons', t.PurchaseButtons, t.descriptionPurchaseButtons)}
                     </div>
 
                     <!-- Section: General Settings -->
                     <div class="civitai-section-title">${t.sectionGeneral}</div>
                     <div class="civitai-settings-layout ${this.tempSettings.layoutMode}">
-                        <div class="civitai-setting-item">
-                            <label class="civitai-custom-checkbox">
-                                <input type="checkbox" id="showControlButton" ${this.tempSettings.showControlButton ? 'checked' : ''}>
-                                <span class="civitai-checkbox-slider"></span>
-                            </label>
-                            <div class="civitai-setting-info">
-                                <h4>${t.showControlButton}</h4>
-                                <p>${t.descriptionControlButton}</p>
-                            </div>
-                        </div>
-
-                        <div class="civitai-setting-item">
-                            <label class="civitai-custom-checkbox">
-                                <input type="checkbox" id="enableBlur" ${this.tempSettings.enableBlur ? 'checked' : ''}>
-                                <span class="civitai-checkbox-slider"></span>
-                            </label>
-                            <div class="civitai-setting-info">
-                                <h4>${t.enableBlur}</h4>
-                                <p>${t.descriptionBlur}</p>
-                            </div>
-                        </div>
+                        ${this.createSettingItem('showControlButton', t.showControlButton, t.descriptionControlButton)}
+                        ${this.createSettingItem('enableBlur', t.enableBlur, t.descriptionBlur)}
 
                         <div class="civitai-setting-item blur-slider-item ${this.tempSettings.enableBlur ? '' : 'disabled'}">
                             <div class="civitai-setting-info">
@@ -788,11 +708,6 @@ class CivitAIController {
 
         // Reset temp settings to saved settings when closing without saving
         this.tempSettings = { ...this.settings };
-
-        // If theme is auto, keep it as auto
-        if (this.tempSettings.theme === 'auto') {
-            // Keep as auto, no need to change
-        }
 
         // Cleanup event listeners
         if (popup._cleanup) {

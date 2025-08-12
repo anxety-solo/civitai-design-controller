@@ -1,5 +1,6 @@
 # 🎨 CivitAI Shit (Design) Controller | WIP
 
+> [!Tip]
 > A Chrome browser extension that removes annoying decorations on CivitAI</br>
 > This is my first extension and my first major project with JS, so the implementation is pretty terrible :3
 
@@ -8,6 +9,8 @@
 <div align="center">
   <img src="preview.png" alt="CivitAI Shits Controller Preview" width="800">
 </div>
+
+</br>
 
 <details>
   <summary><strong>🖼️ Card Preview Example (click to expand/collapse)</strong></summary>
@@ -21,6 +24,8 @@
   </p>
 
 </details>
+
+<h1></h1>
 
 ### ✨ Features
 
@@ -63,6 +68,7 @@
 
 <h1></h1>
 
-> **Note:** This extension uses CSS to hide elements and change the appearance of the page.</br>
-> As a result, it may not remove all decorations or user interface elements 100% in every case.</br>
-> It may also cause false hiding...
+> [!Note]
+> **This extension uses CSS to hide elements and change the appearance of the page**.</br>
+> As a result, it may not remove all decorations elements 100% in every case.</br>
+> _It may also cause false hiding..._
