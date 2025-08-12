@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "CivitAI Design Controller",
-    "version": "1.0.2",
+    "version": "1.0.5",
     "description": "Optimize and customize the appearance of CivitAI website elements for better user experience.",
     "icons": {
         "16": "icon16.png",

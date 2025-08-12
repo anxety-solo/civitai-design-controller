@@ -36,12 +36,12 @@ class DefaultSettings {
             if (scheme === 'dark') return 'dark';
             if (scheme === 'light') return 'light';
         }
-        
+
         // Fallback to system preference
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
             return 'dark';
         }
-        
+
         return 'light';
     }
 }
@@ -82,7 +82,7 @@ class CivitAIController {
                 descriptionBlur: 'Enables/disables stylish background blur. Purely for aesthetics.',
                 descriptionBlurLevel: 'Adjusts blur strength. From “barely” to “can’t see a thing”.',
                 descriptionLanguage: 'Choose the language your extension will speak to you in.',
-                descriptionTheme: 'Switch between light, dark, or automatic theme mode.',
+                descriptionTheme: 'Switch between light, dark, or auto theme mode.',
                 // Section Names
                 sectionPreferences: 'Preferences',
                 sectionAppearance: 'Appearance',
@@ -138,13 +138,13 @@ class CivitAIController {
         try {
             await this.loadSettings();
             this.tempSettings = { ...this.settings };
-            
+
             // Initialize theme if in auto mode
             if (this.settings.theme === 'auto') {
                 // Keep theme as 'auto', but detect for display purposes
                 this.tempSettings.theme = 'auto';
             }
-            
+
             this.setupMessageListener();
             this.createControlButton();
             this.applySettings();
@@ -218,6 +218,14 @@ class CivitAIController {
 
         const controlBtn = document.createElement('div');
         controlBtn.className = 'civitai-design-controller';
+
+        // Add data-theme attribute with current theme
+        let theme = this.tempSettings?.theme || this.settings?.theme || 'auto';
+        if (theme === 'auto') {
+            theme = DefaultSettings.detectTheme();
+        }
+        controlBtn.setAttribute('data-theme', theme);
+
         controlBtn.innerHTML = `
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path class="gear-center" d="M12 15.5C13.93 15.5 15.5 13.93 15.5 12C15.5 10.07 13.93 8.5 12 8.5C10.07 8.5 8.5 10.07 8.5 12C8.5 13.93 10.07 15.5 12 15.5Z"/>
@@ -311,19 +319,19 @@ class CivitAIController {
                                         <p>${t.descriptionTheme}</p>
                                     </div>
                                     <div class="civitai-theme-selector">
-                                        <div class="civitai-theme-option ${this.tempSettings.theme === 'auto' ? 'active' : ''}" data-theme="auto">
+                                        <div class="civitai-theme-option ${this.tempSettings.theme === 'auto' ? 'active' : ''}" data-theme-value="auto">
                                             <svg width="18px" height="18px" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                                             </svg>
                                             Auto
                                         </div>
-                                        <div class="civitai-theme-option ${this.tempSettings.theme === 'light' ? 'active' : ''}" data-theme="light">
+                                        <div class="civitai-theme-option ${this.tempSettings.theme === 'light' ? 'active' : ''}" data-theme-value="light">
                                             <svg width="18px" height="18px" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                 <path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 7 A5 5 0 1 1 12 17 A5 5 0 1 1 12 7 M12 1 L12 4 M12 20 L12 23 M4.22 4.22 L6.34 6.34 M17.66 17.66 L19.78 19.78 M1 12 L4 12 M20 12 L23 12 M4.22 19.78 L6.34 17.66 M17.66 6.34 L19.78 4.22"/>
                                             </svg>
                                             Light
                                         </div>
-                                        <div class="civitai-theme-option ${this.tempSettings.theme === 'dark' ? 'active' : ''}" data-theme="dark">
+                                        <div class="civitai-theme-option ${this.tempSettings.theme === 'dark' ? 'active' : ''}" data-theme-value="dark">
                                             <svg width="18px" height="18px" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M12 22C17.5228 22 22 17.5228 22 12C22 11.5373 21.3065 11.4608 21.0672 11.8568C19.9289 13.7406 17.8615 15 15.5 15C11.9101 15 9 12.0899 9 8.5C9 6.13845 10.2594 4.07105 12.1432 2.93276C12.5392 2.69347 12.4627 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"/>
                                             </svg>
@@ -475,7 +483,7 @@ class CivitAIController {
 
                 <div class="civitai-popup-footer">
                     <div class="civitai-watermark">
-                        <img src="https://avatars.githubusercontent.com/u/93578501?v=4" alt="ANXETY" class="civitai-avatar">
+                        <img src="https://avatars.githubusercontent.com/u/93578501?v=4" alt="ANXETY" class="civitai-author-avatar">
                         <a href="https://github.com/anxety-solo" target="_blank" class="civitai-author-link">by ANXETY</a>
                     </div>
                     <div class="civitai-footer-buttons">
@@ -557,15 +565,15 @@ class CivitAIController {
                 // Add active class to clicked option
                 option.classList.add('active');
 
-                const selectedTheme = option.dataset.theme;
+                const selectedTheme = option.dataset.themeValue;
                 this.tempSettings.theme = selectedTheme;
-                
+
                 // Determine actual theme for popup display
                 let displayTheme = selectedTheme;
                 if (selectedTheme === 'auto') {
                     displayTheme = DefaultSettings.detectTheme();
                 }
-                
+
                 popup.querySelector('.civitai-popup-content').dataset.theme = displayTheme;
 
                 // Update blur effect for new theme
@@ -741,9 +749,9 @@ class CivitAIController {
 
     updateThemeFromSite() {
         if (this.settings.theme !== 'auto') return;
-        
+
         const detectedTheme = DefaultSettings.detectTheme();
-        
+
         // Update popup theme if it's open and in auto mode
         const popup = document.querySelector('.civitai-settings-popup');
         if (popup) {
@@ -780,7 +788,7 @@ class CivitAIController {
 
         // Reset temp settings to saved settings when closing without saving
         this.tempSettings = { ...this.settings };
-        
+
         // If theme is auto, keep it as auto
         if (this.tempSettings.theme === 'auto') {
             // Keep as auto, no need to change
@@ -903,13 +911,13 @@ class CivitAIController {
             childList: true,
             subtree: true,
             attributes: true,
-            attributeFilter: ['data-mantine-color-scheme']
+            attributeFilter: ['data-mantine-color-scheme'],
         });
 
         // Also observe HTML element for theme changes
         this.observer.observe(document.documentElement, {
             attributes: true,
-            attributeFilter: ['data-mantine-color-scheme']
+            attributeFilter: ['data-mantine-color-scheme'],
         });
     }
 
