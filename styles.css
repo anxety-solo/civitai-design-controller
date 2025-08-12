@@ -19,7 +19,7 @@
 
     /* Primary Colors */
     --primary-color: #667eea;
-    --primary-hover: #7d8feb;   
+    --primary-hover: #7d8feb;
     --primary-color-05: color-mix(in srgb, var(--primary-color) 5%, transparent);
     --primary-color-10: color-mix(in srgb, var(--primary-color) 10%, transparent);
     --primary-color-20: color-mix(in srgb, var(--primary-color) 20%, transparent);
@@ -100,7 +100,7 @@
 }
 
 /* Light Theme Variables */
-[data-theme="light"] {
+[data-theme='light'] {
     /* Font/Text Colors */
     --text-primary: #111827;
     --text-secondary: #1f2937;
@@ -855,6 +855,20 @@ body.civitai-hide-avatar-animations img[src*='user avatar decoration'] {
     display: none !important;
 }
 
+/* Normalize author names */
+/* Note: This only works on model cards, not on the author's profile page */
+body.civitai-normalize-author-names [class*='UserAvatarSimple_username__'] {
+    color: white !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    background: none !important;
+    background-image: none !important;
+    -webkit-background-clip: unset !important;
+    background-clip: unset !important;
+    -webkit-text-fill-color: white !important;
+    text-fill-color: white !important;
+}
+
 /* Remove card glow and cosmetic frame styles */
 body.civitai-hide-card-glow [class*='CosmeticWrapper_wrapper__'],
 body.civitai-hide-card-glow [class*='CosmeticWrapper_cssFrame__'],
@@ -866,12 +880,66 @@ body.civitai-hide-card-glow [class*='CosmeticWrapper_glow__'] {
     padding: 0 !important;
     margin: 0 !important;
 }
-/* Hide pseudo-elements (::after) used for decorative effects */
+/* Hide pseudo-elements (::after & ::before) used for decorative effects */
 body.civitai-hide-card-glow [class*='CosmeticWrapper_wrapper__']::after,
 body.civitai-hide-card-glow [class*='CosmeticWrapper_cssFrame__']::after,
-body.civitai-hide-card-glow [class*='CosmeticWrapper_glow__']::after {
+body.civitai-hide-card-glow [class*='CosmeticWrapper_glow__']::after,
+body.civitai-hide-card-glow [class*='CosmeticWrapper_wrapper__']::before,
+body.civitai-hide-card-glow [class*='CosmeticWrapper_cssFrame__']::before,
+body.civitai-hide-card-glow [class*='CosmeticWrapper_glow__']::before {
     content: none !important;
     display: none !important;
+}
+
+/* Improve card appearance */
+body.civitai-improve-card-appearance {
+    /* Apply blur effect to model type info chips in header */
+    [class*='AspectRatioImageCard_header__'] [class*='Cards_infoChip__'],   /* Info on Model Cards */
+    [class*='AspectRatioImageCard_header__'] [class*='Cards_reactions_'],   /* Reactions on Model Cards */
+    [class*='ModelCarousel_reactions_'] {
+        /* Reactions on Images model Carousel */
+        background: rgba(0, 0, 0, 0.5) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+    }
+
+    /* Apply blur effect to statistics chips in footer */
+    [class*='AspectRatioImageCard_footer__'] [class*='Cards_statChip__'],
+    [class*='AspectRatioImageCard_footer__'] [class*='Cards_reactions_'],
+    [class*='ModelCarousel_reactions_'] {
+        background: rgba(0, 0, 0, 0.5) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+    }
+
+    /* Special style for ImageGuard_red__ chips in header and footer */
+    [class*='AspectRatioImageCard_header__'] [class*='ImageGuard_red__'],
+    [class*='AspectRatioImageCard_footer__'] [class*='ImageGuard_red__'] {
+        background: rgba(220, 38, 38, 0.6) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+    }
+
+    /* Add gradient shadow to card footer for better text readability */
+    [class*='AspectRatioImageCard_footer__']::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 100px;
+        background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.9));
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    /* Ensure text content stays above the shadow */
+    [class*='AspectRatioImageCard_footer__'] > * {
+        z-index: 2;
+    }
 }
 
 /* Hide any Pro badge/button (matches any variation) */
@@ -883,4 +951,35 @@ body.civitai-hide-pro-badges a[href*='/pricing'][class*='SupportButton_supportBu
 body.civitai-hide-updates-button a[href='/changelog'],
 body.civitai-hide-purchase-buttons a[href='/shop'] {
     display: none !important;
+}
+
+/* === Unimplemented settings styling === */
+.civitai-setting-item.unimplemented {
+    opacity: 0.6;
+    position: relative;
+    cursor: not-allowed;
+}
+.civitai-setting-item.unimplemented::after {
+    content: '🚧';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+.civitai-setting-item.unimplemented .civitai-custom-checkbox {
+    pointer-events: none;
+}
+.civitai-setting-item.unimplemented .civitai-checkbox-slider {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.civitai-setting-item.unimplemented .civitai-setting-info h4 {
+    color: var(--text-tertiary);
+}
+.civitai-setting-item.unimplemented .civitai-setting-info p {
+    color: var(--text-quaternary);
+    font-style: italic;
 }

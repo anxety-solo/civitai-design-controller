@@ -74,7 +74,7 @@ class CivitAIController {
                 descriptionBanners: 'Stops those endlessly flashing banners. Your eyes will thank you.',
                 descriptionNames: 'Makes all author names follow the same style. No more rainbow circus.',
                 descriptionGlow: 'Turns off the glowing card borders. A card without a “halo” is still a card.',
-                descriptionCardAppearance: 'Improves the appearance of cards for better text readability and overall visual clarity.',
+                descriptionCardAppearance: 'Improves the appearance of cards for better text readability. (May slightly impact performance)',
                 descriptionProBadges: 'Hides Pro badges. Because modesty is classy.',
                 descriptionUpdatesButton: 'Hides the “Updates” button. Seriously, who even clicks that?',
                 descriptionPurchaseButtons: 'Hides purchase buttons. If you’re not spending money — why keep them around?',
@@ -111,7 +111,7 @@ class CivitAIController {
                 descriptionBanners: 'Останавливает эти бесконечно мигающие баннеры. Глазам — спасибо.',
                 descriptionNames: 'Делает ники авторов одинаковыми по стилю. Чтобы без цветного цирка.',
                 descriptionGlow: 'Вырубает светящуюся рамку у карточек. Карточка без “ореола” — тоже карточка.',
-                descriptionCardAppearance: 'Улучшает внешний вид карточек для лучшего восприятия текста и детализации элементов карточек.',
+                descriptionCardAppearance: 'Улучшает внешний вид карточек для лучшего восприятия текста. (Может немного повлиять на производительность)',
                 descriptionProBadges: 'Скрывает значки Pro. Потому что скромность украшает.',
                 descriptionUpdatesButton: 'Прячет кнопку “Updates”. Серьёзно, кто вообще туда жмёт?',
                 descriptionPurchaseButtons: 'Прячет кнопки покупок. Если не планируешь тратить деньги — зачем они тебе?',
@@ -283,7 +283,7 @@ class CivitAIController {
                 </div>
                 
                 <div class="civitai-popup-body">
-                    <!-- Preferences Section -->
+                    <!-- Section: Preferences -->
                     <div class="civitai-section-title">${t.sectionPreferences}</div>
                     <div class="civitai-settings-layout ${this.tempSettings.layoutMode}">
                         <div class="civitai-setting-item preferences-column">
@@ -357,7 +357,7 @@ class CivitAIController {
                             </div>
                         </div>
 
-                        <div class="civitai-setting-item">
+                        <div class="civitai-setting-item unimplemented">
                             <label class="civitai-custom-checkbox">
                                 <input type="checkbox" id="stopProfileBanners" ${this.tempSettings.stopProfileBanners ? 'checked' : ''}>
                                 <span class="civitai-checkbox-slider"></span>

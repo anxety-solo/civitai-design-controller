@@ -1,6 +1,5 @@
-# 🎨 CivitAI Shits (Design) Controller | WIP
+# 🎨 CivitAI Shit (Design) Controller | WIP
 
-> **The extension works halfway...**</br>
 > A Chrome browser extension that removes annoying decorations on CivitAI</br>
 > This is my first extension and my first major project with JS, so the implementation is pretty terrible :3
 
@@ -16,9 +15,9 @@
 
 - [x] **🎭 Avatar Animations Control** - Hide sparkles and animations from user avatars
 - [ ] **🎪 Profile Banner Management** - Stop endlessly flashing profile banners
-- [ ] **👤 Author Name Normalization** - Uniform styling for author names across the platform
+- [x] **👤 Author Name Normalization** - Uniform styling for author names across the platform
 - [x] **✨ Card Glow Effects** - Toggle glowing card borders and outlines
-- [ ] **🖼️ Card Visual Enhancement** - Improve card details for better text readability and overall visual clarity
+- [x] **🖼️ Card Visual Enhancement** - Improve card details for better text readability and overall visual clarity
 - [x] **🏆 Pro Badge Visibility** - Hide Pro badges for a cleaner interface
 - [x] **🔄 Updates Button Control** - Hide the "Updates" button if not needed
 - [x] **💰 Purchase Button Management** - Hide purchase buttons for non-spending users
