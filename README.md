@@ -9,6 +9,19 @@
   <img src="preview.png" alt="CivitAI Shits Controller Preview" width="800">
 </div>
 
+<details>
+  <summary><strong>🖼️ Card Preview Example (click to expand/collapse)</strong></summary>
+
+  <div align="center">
+    <img src="previewCards.png" alt="Card Visual Enhancement Preview (SOBA!!!)" width="800">
+  </div>
+  <p align="center">
+    <em>This is how cards look with the visual enhancement feature enabled.<br>
+    (Can you even tell the difference?! I think it's awesome! :33)</em>
+  </p>
+
+</details>
+
 ### ✨ Features
 
 #### **Visual Customization**
