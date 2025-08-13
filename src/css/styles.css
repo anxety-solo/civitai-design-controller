@@ -40,12 +40,12 @@
     /* Background Colors */
     --bg-primary: rgba(26, 27, 35, 0.95);
     --bg-secondary: rgba(20, 21, 30, 0.4);
-    --bg-tertiary: rgba(255, 255, 255, 0.02);
+    --bg-tertiary: rgba(255, 255, 255, 0.025);
     --bg-overlay: rgba(0, 0, 0, 0.8);
 
     /* Border Colors */
     --border-primary: rgba(45, 46, 63, 0.5);
-    --border-secondary: rgba(45, 46, 63, 0.4);
+    --border-secondary: rgba(45, 46, 63, 0.45);
     --border-tertiary: rgba(75, 85, 99, 0.3);
 
     /* Close Button Colors */
@@ -130,17 +130,19 @@
 
     /* Language/Theme Selector Colors */
     --selector-bg: rgba(255, 255, 255, 0.95);
-    --selector-border: #9ca3af;
+    --selector-border: #b4bbc9;
     --selector-dropdown-bg: #fdfdfd;
-    --selector-dropdown-border: #d1d5db;
+    --selector-dropdown-border: #c2c5ca;
+    --selector-option-hover: var(--primary-color-10);
+    --selector-option-active: var(--primary-color-30);
 
     /* Switch/Checkbox Colors */
     --switch-bg: #d1d5db;
-    --switch-border: #9ca3af;
+    --switch-border: #b4bbc9;
 
     /* Slider Colors */
     --slider-track-bg: #d1d5db;
-    --slider-track-border: #9ca3af;
+    --slider-track-border: #b4bbc9;
 
     /* Button Colors */
     --btn-secondary-color: var(--text-secondary);
@@ -663,7 +665,7 @@ input:checked + .civitai-checkbox-slider:before {
     transform: translateY(0);
 }
 
-.civitai-language-dropdown.show ~ .civitai-language-btn svg {
+.civitai-language-selector:has(.civitai-language-dropdown.show) .civitai-language-btn svg {
     transform: rotate(180deg);
 }
 
@@ -896,14 +898,12 @@ body.civitai-improve-card-appearance {
     /* Apply blur effect to model type info chips in header */
     [class*='AspectRatioImageCard_header__'] [class*='Cards_infoChip__'],   /* Info on Model Cards */
     [class*='AspectRatioImageCard_header__'] [class*='Cards_reactions_'],   /* Reactions on Model Cards */
-    [class*='ModelCarousel_reactions_'] {
-        /* Reactions on Images model Carousel */
+    [class*='ModelCarousel_reactions_'] {                                   /* Reactions on Images model Carousel */
         background: rgba(0, 0, 0, 0.5) !important;
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
         backdrop-filter: blur(10px) !important;
         -webkit-backdrop-filter: blur(10px) !important;
     }
-
     /* Apply blur effect to statistics chips in footer */
     [class*='AspectRatioImageCard_footer__'] [class*='Cards_statChip__'],
     [class*='AspectRatioImageCard_footer__'] [class*='Cards_reactions_'],
@@ -914,11 +914,33 @@ body.civitai-improve-card-appearance {
         -webkit-backdrop-filter: blur(10px) !important;
     }
 
+    /* Secial style for info Button in header */
+    [class*='AspectRatioImageCard_header__'] [class*='mantine-ActionIcon-root'] {
+        background: rgba(0, 0, 0, 0.5) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 50% !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+    }
+    /* Make the SVG icon inside the ActionIcon smaller */
+    [class*='AspectRatioImageCard_header__'] [class*='mantine-ActionIcon-root'] svg {
+        width: 18px !important;
+        height: 18px !important;
+    }
+
     /* Special style for ImageGuard_red__ chips in header and footer */
     [class*='AspectRatioImageCard_header__'] [class*='ImageGuard_red__'],
     [class*='AspectRatioImageCard_footer__'] [class*='ImageGuard_red__'] {
         background: rgba(220, 38, 38, 0.6) !important;
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+    }
+
+    /* Specific style for Early Access/Update chip */
+    [class*='AspectRatioImageCard_header__'] [class*='Cards_chip__'][data-variant="filled"] {
+        background: rgba(0, 255, 0, 0.2) !important;
+        border: 1px solid rgba(0, 255, 0, 0.35) !important;
         backdrop-filter: blur(10px) !important;
         -webkit-backdrop-filter: blur(10px) !important;
     }
@@ -935,7 +957,6 @@ body.civitai-improve-card-appearance {
         pointer-events: none;
         z-index: 1;
     }
-
     /* Ensure text content stays above the shadow */
     [class*='AspectRatioImageCard_footer__'] > * {
         z-index: 2;

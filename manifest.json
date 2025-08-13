@@ -1,37 +1,37 @@
 {
     "manifest_version": 3,
     "name": "CivitAI Design Controller",
-    "version": "1.0.5",
-    "description": "Optimize and customize the appearance of CivitAI website elements for better user experience.",
+    "version": "1.0.6",
+    "description": "Optimize and customize the appearance of CivitAI website elements.",
     "icons": {
-        "16": "icon16.png",
-        "48": "icon48.png",
-        "128": "icon128.png"
+        "16": "src/images/icon16.png",
+        "48": "src/images/icon48.png",
+        "128": "src/images/icon128.png"
     },
     "permissions": ["storage", "scripting", "tabs"],
     "host_permissions": ["*://civitai.com/*", "*://*.civitai.com/*"],
     "background": {
-        "service_worker": "background.js"
+        "service_worker": "src/js/background.js"
     },
     "action": {
-        "default_title": "CivitAI Design Settings",
+        "default_title": "CivitAI Design Controller",
         "default_icon": {
-            "16": "icon16.png",
-            "48": "icon48.png",
-            "128": "icon128.png"
+            "16": "src/images/icon16.png",
+            "48": "src/images/icon48.png",
+            "128": "src/images/icon128.png"
         }
     },
     "content_scripts": [
         {
             "matches": ["*://civitai.com/*", "*://*.civitai.com/*"],
-            "js": ["content.js"],
-            "css": ["styles.css"],
+            "js": ["src/js/content.js"],
+            "css": ["src/css/styles.css"],
             "run_at": "document_start"
         }
     ],
     "web_accessible_resources": [
         {
-            "resources": ["styles.css", "icon*.png"],
+            "resources": ["src/css/styles.css", "src/images/icon*.png"],
             "matches": ["*://civitai.com/*", "*://*.civitai.com/*"]
         }
     ]

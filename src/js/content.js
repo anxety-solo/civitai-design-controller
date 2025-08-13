@@ -2,7 +2,7 @@ class DefaultSettings {
     static get() {
         return {
             hideAvatarAnimations: true,
-            stopProfileBanners: true,
+            stopProfileBanners: false,
             normalizeAuthorNames: true,
             hideCardGlow: true,
             cardAppearance: true,
@@ -11,7 +11,7 @@ class DefaultSettings {
             hidePurchaseButtons: false,
             showControlButton: true,
             enableBlur: false,
-            blurLevel: 12,
+            blurLevel: 8,
             layoutMode: 'grid',
             language: this.detectLanguage(),
             theme: 'auto', // 'auto', 'light', 'dark'
@@ -68,6 +68,28 @@ class CivitAIController {
             `;
         };
 
+        // Helper method to get layout toggle icon
+        this.getLayoutToggleIcon = (layout) => {
+            return layout === 'grid'
+                ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h7v7H4V4zm0 9h7v7H4v-7zm9-9h7v7h-7V4zm0 9h7v7h-7v-7z"/></svg>'
+                : '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/></svg>';
+        };
+
+        // Helper method to get actual theme for display
+        this.getDisplayTheme = (theme) => {
+            return theme === 'auto' ? DefaultSettings.detectTheme() : theme;
+        };
+
+        // Helper method to manage control button
+        this.manageControlButton = () => {
+            const controlBtn = document.querySelector('.civitai-design-controller');
+            if (controlBtn) controlBtn.remove();
+
+            if (this.settings.showControlButton) {
+                setTimeout(() => this.createControlButton(), 100);
+            }
+        };
+
         this.translations = {
             en: {
                 // Popup
@@ -92,7 +114,7 @@ class CivitAIController {
                 descriptionBanners: 'Stops those endlessly flashing banners. Your eyes will thank you.',
                 descriptionNames: 'Makes all author names follow the same style. No more rainbow circus.',
                 descriptionGlow: 'Turns off the glowing card borders. A card without a “halo” is still a card.',
-                descriptionCardAppearance: 'Improves the appearance of cards for better text readability. (May slightly impact performance)',
+                descriptionCardAppearance: 'Improves the appearance of cards for better text readability (<i>May slightly impact performance</i>)',
                 descriptionProBadges: 'Hides Pro badges. Because modesty is classy.',
                 descriptionUpdatesButton: 'Hides the “Updates” button. Seriously, who even clicks that?',
                 descriptionPurchaseButtons: 'Hides purchase buttons. If you’re not spending money — why keep them around?',
@@ -129,7 +151,7 @@ class CivitAIController {
                 descriptionBanners: 'Останавливает эти бесконечно мигающие баннеры. Глазам — спасибо.',
                 descriptionNames: 'Делает ники авторов одинаковыми по стилю. Чтобы без цветного цирка.',
                 descriptionGlow: 'Вырубает светящуюся рамку у карточек. Карточка без “ореола” — тоже карточка.',
-                descriptionCardAppearance: 'Улучшает внешний вид карточек для лучшего восприятия текста. (Может немного повлиять на производительность)',
+                descriptionCardAppearance: 'Улучшает внешний вид карточек для лучшего восприятия текста (<i>Может немного повлиять на производительность</i>)',
                 descriptionProBadges: 'Скрывает значки Pro. Потому что скромность украшает.',
                 descriptionUpdatesButton: 'Прячет кнопку “Updates”. Серьёзно, кто вообще туда жмёт?',
                 descriptionPurchaseButtons: 'Прячет кнопки покупок. Если не планируешь тратить деньги — зачем они тебе?',
@@ -156,12 +178,6 @@ class CivitAIController {
         try {
             await this.loadSettings();
             this.tempSettings = { ...this.settings };
-
-            // Initialize theme if in auto mode
-            if (this.settings.theme === 'auto') {
-                // Keep theme as 'auto', but detect for display purposes
-                this.tempSettings.theme = 'auto';
-            }
 
             this.setupMessageListener();
             this.createControlButton();
@@ -238,10 +254,7 @@ class CivitAIController {
         controlBtn.className = 'civitai-design-controller';
 
         // Add data-theme attribute with current theme
-        let theme = this.tempSettings?.theme || this.settings?.theme || 'auto';
-        if (theme === 'auto') {
-            theme = DefaultSettings.detectTheme();
-        }
+        const theme = this.getDisplayTheme(this.tempSettings?.theme || this.settings?.theme || 'auto');
         controlBtn.setAttribute('data-theme', theme);
 
         controlBtn.innerHTML = `
@@ -276,21 +289,14 @@ class CivitAIController {
         const t = this.translations[this.tempSettings.language];
 
         // Determine initial theme for popup
-        let initialTheme = this.tempSettings.theme;
-        if (this.tempSettings.theme === 'auto') {
-            initialTheme = DefaultSettings.detectTheme();
-        }
+        const initialTheme = this.getDisplayTheme(this.tempSettings.theme);
 
         popup.innerHTML = `
             <div class="civitai-popup-content" data-layout="${this.tempSettings.layoutMode}" data-theme="${initialTheme}">
                 <div class="civitai-popup-header">
                     <h3>${t.title}</h3>
                     <button class="civitai-layout-toggle" data-layout="${this.tempSettings.layoutMode}">
-                        ${
-                            this.tempSettings.layoutMode === 'grid'
-                                ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h7v7H4V4zm0 9h7v7H4v-7zm9-9h7v7h-7V4zm0 9h7v7h-7v-7z"/></svg>'
-                                : '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/></svg>'
-                        }
+                        ${this.getLayoutToggleIcon(this.tempSettings.layoutMode)}
                     </button>
                     <button class="civitai-close-btn" aria-label="Close">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -428,8 +434,6 @@ class CivitAIController {
     }
 
     setupPopupEventListeners(popup) {
-        const t = this.translations[this.tempSettings.language];
-
         // Layout toggle
         const layoutToggle = popup.querySelector('.civitai-layout-toggle');
         layoutToggle.addEventListener('click', (e) => {
@@ -439,10 +443,7 @@ class CivitAIController {
 
             // Update layout toggle icon
             layoutToggle.dataset.layout = newLayout;
-            layoutToggle.innerHTML =
-                newLayout === 'grid'
-                    ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h7v7H4V4zm0 9h7v7H4v-7zm9-9h7v7h-7V4zm0 9h7v7h-7v-7z"/></svg>'
-                    : '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/></svg>';
+            layoutToggle.innerHTML = this.getLayoutToggleIcon(newLayout);
 
             // Animate layout change
             const popupContent = popup.querySelector('.civitai-popup-content');
@@ -489,10 +490,7 @@ class CivitAIController {
                 this.tempSettings.theme = selectedTheme;
 
                 // Determine actual theme for popup display
-                let displayTheme = selectedTheme;
-                if (selectedTheme === 'auto') {
-                    displayTheme = DefaultSettings.detectTheme();
-                }
+                const displayTheme = this.getDisplayTheme(selectedTheme);
 
                 popup.querySelector('.civitai-popup-content').dataset.theme = displayTheme;
 
@@ -693,10 +691,7 @@ class CivitAIController {
         popup.style.backdropFilter = level > 0 ? `blur(${level}px)` : 'none';
 
         // Determine actual theme for display
-        let displayTheme = this.tempSettings.theme;
-        if (this.tempSettings.theme === 'auto') {
-            displayTheme = DefaultSettings.detectTheme();
-        }
+        const displayTheme = this.getDisplayTheme(this.tempSettings.theme);
 
         const opacity = level > 0 ? 0.95 : 1;
         content.style.background = displayTheme === 'light' ? `rgba(255, 255, 255, ${opacity})` : `rgba(26, 27, 35, ${opacity})`;
@@ -724,12 +719,7 @@ class CivitAIController {
     saveSettingsFromTemp() {
         // If the button setting has changed, update the UI
         if (this.settings.showControlButton !== this.tempSettings.showControlButton) {
-            const controlBtn = document.querySelector('.civitai-design-controller');
-            if (controlBtn) controlBtn.remove();
-
-            if (this.tempSettings.showControlButton) {
-                setTimeout(() => this.createControlButton(), 100);
-            }
+            this.manageControlButton();
         }
 
         this.settings = { ...this.tempSettings };
@@ -746,10 +736,7 @@ class CivitAIController {
         this.settings = { ...defaultSettings, language: currentLanguage, theme: currentTheme };
         this.tempSettings = { ...this.settings };
 
-        const controlBtn = document.querySelector('.civitai-design-controller');
-        if (controlBtn) controlBtn.remove();
-
-        setTimeout(() => this.createControlButton(), 100);
+        this.manageControlButton();
 
         this.saveSettings();
         this.applySettings();
