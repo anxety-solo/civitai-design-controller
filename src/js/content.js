@@ -2,7 +2,8 @@ class DefaultSettings {
     static get() {
         return {
             hideAvatarAnimations: true,
-            stopProfileBanners: false,
+            hideProfileBadges: true,
+            hideProfileBanners: true,
             normalizeAuthorNames: true,
             hideCardGlow: true,
             cardAppearance: true,
@@ -95,7 +96,8 @@ class CivitAIController {
                 // Popup
                 title: 'CivitAI Appearance Settings',
                 avatarAnimations: 'Hide Avatar Decorations',
-                profileBanners: 'Stop Banner Animations',
+                profileBadges: 'Hide Profile Badges',
+                profileBanners: 'Hide Banner Animations',
                 normalizeAuthorNames: 'Uniform Author Name Style',
                 cardGlow: 'Hide Card Outline Glow',
                 cardAppearance: 'Improve Card Appearance',
@@ -111,7 +113,8 @@ class CivitAIController {
                 theme: 'Extension Theme',
                 // Description
                 descriptionAvatar: 'Removes sparkles and animations from avatars. Pretty? Sure. Necessary? Not always.',
-                descriptionBanners: 'Stops those endlessly flashing banners. Your eyes will thank you.',
+                descriptionProfileBadges: 'Hides profile badges. Because we don’t care about what you got.',
+                descriptionBanners: 'Hides those endlessly flashing banners. Your eyes will thank you.',
                 descriptionNames: 'Makes all author names follow the same style. No more rainbow circus.',
                 descriptionGlow: 'Turns off the glowing card borders. A card without a “halo” is still a card.',
                 descriptionCardAppearance: 'Improves the appearance of cards for better text readability (<i>May slightly impact performance</i>)',
@@ -132,7 +135,8 @@ class CivitAIController {
                 // Popup
                 title: 'Настройки оформления CivitAI',
                 avatarAnimations: 'Скрыть украшения аватаров',
-                profileBanners: 'Остановить анимацию баннеров',
+                profileBadges: 'Скрыть профильные бейджи',
+                profileBanners: 'Скрыть анимацию баннеров',
                 normalizeAuthorNames: 'Единый стиль имен авторов',
                 cardGlow: 'Скрыть обводку карточек',
                 cardAppearance: 'Улучшить внешний вид карточек',
@@ -148,7 +152,8 @@ class CivitAIController {
                 theme: 'Тема расширения',
                 // Description
                 descriptionAvatar: 'Убирает всякие блестяшки и анимации с аватаров. Красиво? Да. Нужно? Не всегда.',
-                descriptionBanners: 'Останавливает эти бесконечно мигающие баннеры. Глазам — спасибо.',
+                descriptionProfileBadges: 'Скрывает профильные бейджи. Потому что нам не интересно, что ты получил.',
+                descriptionBanners: 'Скрывает эти бесконечно мигающие баннеры. Глазам — спасибо.',
                 descriptionNames: 'Делает ники авторов одинаковыми по стилю. Чтобы без цветного цирка.',
                 descriptionGlow: 'Вырубает светящуюся рамку у карточек. Карточка без “ореола” — тоже карточка.',
                 descriptionCardAppearance: 'Улучшает внешний вид карточек для лучшего восприятия текста (<i>Может немного повлиять на производительность</i>)',
@@ -371,7 +376,8 @@ class CivitAIController {
                     <div class="civitai-section-title">${t.sectionAppearance}</div>
                     <div class="civitai-settings-layout ${this.tempSettings.layoutMode}">
                         ${this.createSettingItem('hideAvatarAnimations', t.avatarAnimations, t.descriptionAvatar)}
-                        ${this.createSettingItem('stopProfileBanners', t.profileBanners, t.descriptionBanners, true)}
+                        ${this.createSettingItem('hideProfileBadges', t.profileBadges, t.descriptionProfileBadges)}
+                        ${this.createSettingItem('hideProfileBanners', t.profileBanners, t.descriptionBanners)}
                         ${this.createSettingItem('normalizeAuthorNames', t.normalizeAuthorNames, t.descriptionNames)}
                         ${this.createSettingItem('hideCardGlow', t.cardGlow, t.descriptionGlow)}
                         ${this.createSettingItem('cardAppearance', t.cardAppearance, t.descriptionCardAppearance)}
@@ -757,7 +763,8 @@ class CivitAIController {
 
         // Apply settings classes
         body.classList.toggle('civitai-hide-avatar-animations', this.settings.hideAvatarAnimations);
-        body.classList.toggle('civitai-stop-profile-banners', this.settings.stopProfileBanners);
+        body.classList.toggle('civitai-hide-profile-badges', this.settings.hideProfileBadges);
+        body.classList.toggle('civitai-hide-profile-banners', this.settings.hideProfileBanners);
         body.classList.toggle('civitai-normalize-author-names', this.settings.normalizeAuthorNames);
         body.classList.toggle('civitai-hide-card-glow', this.settings.hideCardGlow);
         body.classList.toggle('civitai-improve-card-appearance', this.settings.cardAppearance);

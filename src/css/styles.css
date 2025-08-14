@@ -244,7 +244,7 @@
 /* Header */
 .civitai-popup-header {
     position: relative;
-    padding: 24px 24px 16px;
+    padding: 20px 24px;
     border-bottom: 1px solid var(--border-primary);
     display: flex;
     flex-direction: column;
@@ -327,7 +327,7 @@
 
 /* Body */
 .civitai-popup-body {
-    padding: 24px;
+    padding: 20px 24px;
     max-height: var(--popup-body-max-height);
     color: var(--text-secondary);
     box-sizing: border-box;
@@ -857,9 +857,22 @@ body.civitai-hide-avatar-animations img[src*='user avatar decoration'] {
     display: none !important;
 }
 
+/* Hide profile badges */
+body.civitai-hide-profile-badges [class*='AspectRatioImageCard_footer__'] div[style*="display: flex; width: 28px;"],                    /* Badges on Card (Models Cards Page) */
+body.civitai-hide-profile-badges [class*='mantine-Card-root'] [class*='mantine-Group-root'] div[style*="display: flex; width: 60px;"],  /* Badges on UserData (Model Page) */
+body.civitai-hide-profile-badges [class*='MasonryContainer_queries__'] div[style*="display: flex; width: 20px;"] {
+    display: none !important;
+}
+
+/* Hide profile banner videos */
+body.civitai-hide-profile-banners [class*='mantine-Card-root'] [class*='mantine-Card-section'] [class*='EdgeVideo_iosScroll__'] video {
+    display: none !important;
+}
+
 /* Normalize author names */
 /* Note: This only works on model cards, not on the author's profile page */
-body.civitai-normalize-author-names [class*='UserAvatarSimple_username__'] {
+body.civitai-normalize-author-names [class*='UserAvatarSimple_username__'],                                 /* Author name on Card (Models Cards Page) */
+body.civitai-normalize-author-names [class*='CreatorCard_profileDetails__'] p[data-variant='gradient'] {    /* Author name UserData (Model Page)*/
     color: white !important;
     font-size: 14px !important;
     font-weight: 500 !important;
@@ -898,24 +911,42 @@ body.civitai-improve-card-appearance {
     /* Apply blur effect to model type info chips in header */
     [class*='AspectRatioImageCard_header__'] [class*='Cards_infoChip__'],   /* Info on Model Cards */
     [class*='AspectRatioImageCard_header__'] [class*='Cards_reactions_'],   /* Reactions on Model Cards */
-    [class*='ModelCarousel_reactions_'] {                                   /* Reactions on Images model Carousel */
+    [class*='ModelCarousel_reactions_'],                                    /* Reactions on Images model Carousel */
+    [class*='ImagesAsPostsCard_reactions__'] {                              /* Reactions on User Images List on Model Page */
         background: rgba(0, 0, 0, 0.5) !important;
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
         backdrop-filter: blur(10px) !important;
         -webkit-backdrop-filter: blur(10px) !important;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7), 0 0px 1px rgba(0, 0, 0, 0.5);
     }
     /* Apply blur effect to statistics chips in footer */
     [class*='AspectRatioImageCard_footer__'] [class*='Cards_statChip__'],
     [class*='AspectRatioImageCard_footer__'] [class*='Cards_reactions_'],
-    [class*='ModelCarousel_reactions_'] {
+    [class*='ModelCarousel_reactions_'],
+    [class*='ImagesAsPostsCard_reactions__'] {
         background: rgba(0, 0, 0, 0.5) !important;
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
         backdrop-filter: blur(10px) !important;
         -webkit-backdrop-filter: blur(10px) !important;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7), 0 0px 1px rgba(0, 0, 0, 0.5);
     }
 
-    /* Secial style for info Button in header */
-    [class*='AspectRatioImageCard_header__'] [class*='mantine-ActionIcon-root'] {
+    /* Reduce text size in card footer for better compactness */
+    [class*='AspectRatioImageCard_footer__'] p[data-size='xl'] {
+        font-size: 16px !important;
+        line-height: 1.1 !important;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7), 0 0px 1px rgba(0, 0, 0, 0.5);
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-height: calc(2 * 1.1em) !important; /* Ensures only 2 lines are visible */
+    }
+
+    /* Special style for info Button in header */
+    [class*='AspectRatioImageCard_header__'] [class*='mantine-ActionIcon-root'],    /* Info Button on Card (Models Cards Page) */
+    [class*='transform-3d'] [class*='mantine-ActionIcon-root'] {                    /* Info Button on Card (Users Images List on Model Page) */
         background: rgba(0, 0, 0, 0.5) !important;
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
         border-radius: 50% !important;
@@ -923,14 +954,16 @@ body.civitai-improve-card-appearance {
         -webkit-backdrop-filter: blur(10px) !important;
     }
     /* Make the SVG icon inside the ActionIcon smaller */
-    [class*='AspectRatioImageCard_header__'] [class*='mantine-ActionIcon-root'] svg {
+    [class*='AspectRatioImageCard_header__'] [class*='mantine-ActionIcon-root'] svg,
+    [class*='transform-3d'] [class*='mantine-ActionIcon-root'] svg {
         width: 18px !important;
         height: 18px !important;
     }
 
     /* Special style for ImageGuard_red__ chips in header and footer */
     [class*='AspectRatioImageCard_header__'] [class*='ImageGuard_red__'],
-    [class*='AspectRatioImageCard_footer__'] [class*='ImageGuard_red__'] {
+    [class*='AspectRatioImageCard_footer__'] [class*='ImageGuard_red__'],
+    [class*='ImageGuard_red__'] {
         background: rgba(220, 38, 38, 0.6) !important;
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
         backdrop-filter: blur(10px) !important;
@@ -939,10 +972,11 @@ body.civitai-improve-card-appearance {
 
     /* Specific style for Early Access/Update chip */
     [class*='AspectRatioImageCard_header__'] [class*='Cards_chip__'][data-variant="filled"] {
-        background: rgba(0, 255, 0, 0.2) !important;
-        border: 1px solid rgba(0, 255, 0, 0.35) !important;
+        background: rgba(0, 100, 0, 0.25) !important;
+        border: 1px solid rgba(0, 200, 0, 0.5) !important;
         backdrop-filter: blur(10px) !important;
         -webkit-backdrop-filter: blur(10px) !important;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7), 0 0px 1px rgba(0, 0, 0, 0.5);
     }
 
     /* Add gradient shadow to card footer for better text readability */
@@ -952,7 +986,7 @@ body.civitai-improve-card-appearance {
         bottom: 0;
         left: 0;
         right: 0;
-        height: 100px;
+        height: 120px;
         background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.9));
         pointer-events: none;
         z-index: 1;
