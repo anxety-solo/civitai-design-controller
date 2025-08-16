@@ -885,9 +885,10 @@ body.civitai-normalize-author-names [class*='CreatorCard_profileDetails__'] p[da
 }
 
 /* Remove card glow and cosmetic frame styles */
-body.civitai-hide-card-glow [class*='CosmeticWrapper_wrapper__'],
-body.civitai-hide-card-glow [class*='CosmeticWrapper_cssFrame__'],
-body.civitai-hide-card-glow [class*='CosmeticWrapper_glow__'] {
+/*Note: `.tabler-icon-pin-filled` is used for pinned cards - we need to exclude them from the styles*/
+body.civitai-hide-card-glow [class*='CosmeticWrapper_wrapper__']:not(:has(.tabler-icon-pin-filled)),
+body.civitai-hide-card-glow [class*='CosmeticWrapper_cssFrame__']:not(:has(.tabler-icon-pin-filled)),
+body.civitai-hide-card-glow [class*='CosmeticWrapper_glow__']:not(:has(.tabler-icon-pin-filled)) {
     --bgGradient: none !important;
     background: none !important;
     box-shadow: none !important;
@@ -896,12 +897,12 @@ body.civitai-hide-card-glow [class*='CosmeticWrapper_glow__'] {
     margin: 0 !important;
 }
 /* Hide pseudo-elements (::after & ::before) used for decorative effects */
-body.civitai-hide-card-glow [class*='CosmeticWrapper_wrapper__']::after,
-body.civitai-hide-card-glow [class*='CosmeticWrapper_cssFrame__']::after,
-body.civitai-hide-card-glow [class*='CosmeticWrapper_glow__']::after,
-body.civitai-hide-card-glow [class*='CosmeticWrapper_wrapper__']::before,
-body.civitai-hide-card-glow [class*='CosmeticWrapper_cssFrame__']::before,
-body.civitai-hide-card-glow [class*='CosmeticWrapper_glow__']::before {
+body.civitai-hide-card-glow [class*='CosmeticWrapper_wrapper__']:not(:has(.tabler-icon-pin-filled))::after,
+body.civitai-hide-card-glow [class*='CosmeticWrapper_cssFrame__']:not(:has(.tabler-icon-pin-filled))::after,
+body.civitai-hide-card-glow [class*='CosmeticWrapper_glow__']:not(:has(.tabler-icon-pin-filled))::after,
+body.civitai-hide-card-glow [class*='CosmeticWrapper_wrapper__']:not(:has(.tabler-icon-pin-filled))::before,
+body.civitai-hide-card-glow [class*='CosmeticWrapper_cssFrame__']:not(:has(.tabler-icon-pin-filled))::before,
+body.civitai-hide-card-glow [class*='CosmeticWrapper_glow__']:not(:has(.tabler-icon-pin-filled))::before {
     content: none !important;
     display: none !important;
 }
@@ -960,9 +961,8 @@ body.civitai-improve-card-appearance {
         height: 18px !important;
     }
 
-    /* Special style for ImageGuard_red__ chips in header and footer */
+    /* Special style for ImageGuard (Red) button in header */
     [class*='AspectRatioImageCard_header__'] [class*='ImageGuard_red__'],
-    [class*='AspectRatioImageCard_footer__'] [class*='ImageGuard_red__'],
     [class*='ImageGuard_red__'] {
         background: rgba(220, 38, 38, 0.6) !important;
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
@@ -970,7 +970,7 @@ body.civitai-improve-card-appearance {
         -webkit-backdrop-filter: blur(10px) !important;
     }
 
-    /* Specific style for Early Access/Update chip */
+    /* Specific style for Early Access/Update chips */
     [class*='AspectRatioImageCard_header__'] [class*='Cards_chip__'][data-variant="filled"] {
         background: rgba(0, 100, 0, 0.25) !important;
         border: 1px solid rgba(0, 200, 0, 0.5) !important;
@@ -1035,6 +1035,5 @@ body.civitai-hide-purchase-buttons a[href='/shop'] {
     color: var(--text-tertiary);
 }
 .civitai-setting-item.unimplemented .civitai-setting-info p {
-    color: var(--text-quaternary);
     font-style: italic;
 }

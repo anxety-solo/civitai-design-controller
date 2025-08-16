@@ -7,7 +7,7 @@
 > [!Warning]
 > This extension is a joke and was made as a fun experiment, not professionally. The code is terrible, the implementation is a mess, and honestly—CivitAI itself is kind of bullshit :33
 
-[![Version](https://img.shields.io/badge/version-1.0.7-blue)](https://github.com/anxety-solo/civitai-design-controller)
+[![Version](https://img.shields.io/badge/version-1.0.8-blue)](https://github.com/anxety-solo/civitai-design-controller)
 
 <div align="center">
   <img src="src/images/preview.png" alt="CivitAI Shits Controller Preview" width="800">
